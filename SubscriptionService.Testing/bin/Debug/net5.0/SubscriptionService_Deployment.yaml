@@ -1,0 +1,35 @@
+﻿
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: subscriptionservice
+  labels:
+    app: subscriptionservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: subscriptionservice
+  template:
+    metadata:
+      labels:
+        app: subscriptionservice
+    spec:
+      containers:
+      - name: subscriptionservice
+        image: mailorderpharmacy.azurecr.io/subscriptionserviceimage:latest
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: subscriptionservicesecret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: subscriptionservice-service
+spec:
+ type: LoadBalancer
+ ports:
+ - port: 80
+ selector:
+   app: subscriptionservice
